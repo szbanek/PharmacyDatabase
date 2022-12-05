@@ -1,0 +1,52 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+{{ super() }}
+	<style>
+		body { background: #e8f1f9; }
+	</style>
+{% endblock %}
+
+
+{% block title %}
+Sock Style List
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row pb-5">
+    <div class="col-md-10 col-lg-8 mx-lg-auto mx-md-auto">
+
+      <h1 class="pt-5 pb-2">LISTA DYŻURÓW</h1>
+
+	  <p class="ml-4"><a href="{{ url_for('index') }}">Powrót do strony głównej</a></p>
+
+		<table class="table">
+			<tr>
+				<th>ID FARMACEUTY</th>
+				<th>ID APTEKI</th>
+				<th>DZIEŃ</th>
+                <th>GODZINA ROZPOCZĘCIA</th>
+                <th>GODZINA ZAMKNIĘCIA</th>
+			</tr>
+
+
+			<!-- here is a for-loop to give us all the socks -->
+			{% for DYZUR in lista %}
+			<tr>
+				<td>{{ DYZUR.id_farmaceuta }}</td>
+				<td>{{ DYZUR.id_apteka }}</td>
+				<td>{{ DYZUR.dzien }}</td>
+                <td>{{ DYZUR.godz_od }}</td>
+				<td>{{ DYZUR.godz_do }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+		</div>
+	</div>
+</div>
+
+{% endblock %}
