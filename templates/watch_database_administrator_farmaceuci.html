@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% block title %}
+    Watch
+{% endblock %}
+{% block content %}
+
+<div class="col  d-flex justify-content-end align-items-start">
+    <a href="/apteki" class="btn btn-success btn-lg" role="button">Apteki</a>
+    <a href="/dyzury" class="btn btn-success btn-lg" role="button">Dyżury</a>
+    <a class="btn btn-success btn-lg" disabled role="button">Farmaceuci</a>
+    <a href="/klienci" class="btn btn-success btn-lg" role="button">Klienci</a>
+    <a href="/zamowienia" class="btn btn-success btn-lg" role="button">Zamówienia</a>
+    <a href="/leki" class="btn btn-success btn-lg" role="button">Leki</a>
+    <a href="/magazyny" class="btn btn-success btn-lg" role="button">Magazyny</a>
+    <a href="/administratorzy" class="btn btn-success btn-lg" role="button">Administratorzy</a>
+</div>
+
+<table class="table">
+  <tr class="table__header">
+    {% for header in headings %}
+    <th class="table__cell">{{ header }}</th>
+    {% endfor %}
+  </tr>
+  {% for row in data %}
+  <tr class="table__row">
+    {% for cell in row %}
+    <td class="table_cell">{{ cell }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
