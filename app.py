@@ -15,7 +15,7 @@ mydb=mysql.connector.connect(
     database="bazaDanych"
 )
 
-mycursor=mydb.cursor();
+mycursor=mydb.cursor()
 #for data in records:
     #print(data)
 
@@ -40,32 +40,32 @@ def watch():
 
 @app.route("/apteki")
 def show_table_apteka_to_adm():
-    mycursor.execute("select * from APTEKA");
-    data_apteka = mycursor.fetchall();
+    mycursor.execute("select * from APTEKA")
+    data_apteka = mycursor.fetchall()
     return render_template('watch_database_administrator_apteka.html', headings=headings_apteka, data=data_apteka)
 
 @app.route("/dyzury")
 def show_table_dyzury_to_adm():
-    mycursor.execute("select * from DYZUR");
-    data_dyzury = mycursor.fetchall();
+    mycursor.execute("select * from DYZUR")
+    data_dyzury = mycursor.fetchall()
     return render_template('watch_database_administrator_dyzury.html', headings=headings_dyzury, data=data_dyzury)
 
 @app.route("/farmaceuci")
 def show_table_farmaceuta_to_adm():
-    mycursor.execute("select * from FARMACEUTA");
-    data_farmaceuci = mycursor.fetchall();
+    mycursor.execute("select * from FARMACEUTA")
+    data_farmaceuci = mycursor.fetchall()
     return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci)
 
 @app.route("/klienci")
 def show_table_klient_to_adm():
-    mycursor.execute("select * from KLIENT");
-    data_klienci = mycursor.fetchall();
+    mycursor.execute("select * from KLIENT")
+    data_klienci = mycursor.fetchall()
     return render_template('watch_database_administrator_klienci.html', headings=headings_klienci, data=data_klienci)
 
 @app.route("/zamowienia")
 def show_table_zamowienia_to_adm():
-    mycursor.execute("select * from ZAMOWIENIE");
-    data_zamowienia = mycursor.fetchall();
+    mycursor.execute("select * from ZAMOWIENIE")
+    data_zamowienia = mycursor.fetchall()
     return render_template('watch_database_administrator_zamowienia.html', headings=headings_zamowienia, data=data_zamowienia)
 
 
@@ -77,14 +77,14 @@ def show_table_lek_to_adm():
         data_lek = mycursor.fetchall()
         return render_template('watch_database_administrator_lek.html', headings=headings_lek, data=data_lek)
     else:
-        mycursor.execute("select * from LEK");
-        data_lek = mycursor.fetchall();
+        mycursor.execute("select * from LEK")
+        data_lek = mycursor.fetchall()
         return render_template('watch_database_administrator_lek.html', headings=headings_lek, data=data_lek)
 
 @app.route("/magazyny")
 def show_table_magazyn_to_adm():
-    mycursor.execute("select * from MAGAZYN");
-    data_magazyny = mycursor.fetchall();
+    mycursor.execute("select * from MAGAZYN")
+    data_magazyny = mycursor.fetchall()
     return render_template('watch_database_administrator_magazyny.html', headings=headings_magazyny, data=data_magazyny)
 
 @app.route("/administratorzy", methods=['GET', 'POST'])
@@ -95,10 +95,157 @@ def show_table_administrator_to_adm():
         data_administratorzy = mycursor.fetchall()
         return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy)
     else:
-        mycursor.execute("select * from ADMINISTRATOR");
-        data_administratorzy = mycursor.fetchall();
+        mycursor.execute("select * from ADMINISTRATOR")
+        data_administratorzy = mycursor.fetchall()
         return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy)
 
+def update_dyzur(
+    id_farm,
+    id_apteki,
+    dzien,
+    godz_od,
+    godz_do
+):
+    query = f"""UPDATE TABLE DYZUR
+            SET godz_od = {godz_od},
+                godz_do = {godz_do}
+            WHERE DZIEN = '{dzien}' and
+            ID_FARMACEUTA = {id_farm} and
+            ID_APTEKA = {id_apteki};"""
+    mycursor.execute(query)
+    mydb.commit()
+    
+def update_apteka(
+    id,
+    nazwa,
+    godz_od,
+    godz_do,
+    adres,
+    telefon
+):
+    query = f"""UPDATE TABLE APTEKA
+            SET nazwa = '{nazwa}',
+                godz_od = {godz_od},
+                godz_do = {godz_do},
+                adres = '{adres}',
+                telefon = {telefon}
+            WHERE id = {id};"""
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_lek(
+    id,
+    nazwa,
+    recepta
+):
+    query = f"""UPDATE TABLE LEK
+            SET nazwa = '{nazwa}',
+                recepta = {recepta}
+            WHERE id = {id}; """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_miasto(
+    id,
+    nazwa,
+    kod
+):
+    query = f"""UPDATE TABLE MIASTO
+            SET nazwa = '{nazwa}',
+                kod = '{kod}'
+            WHERE id = {id} """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_lekarstwa(
+    id_zam, 
+    id_lek,
+    ilosc
+):
+    query = f"""UPDATE TABLE LEKARSTWA
+            SET ilosc = {ilosc},
+            WHERE ID_ZAMOWIENIE = {id_zam} and
+                ID_LEKARSTWO = {id_lek}; """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_zamowienie(
+    id,
+    status,
+    data_zam
+):
+    query = f"""UPDATE TABLE ZAMOWIENIE
+            SET status '{status}',
+                DATA_ZAMOWIENIA = '{data_zam}'
+            WHERE id = {id} """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_magazyn(
+    pojemnosc,
+    adres,
+    id_apteki,
+    id_lek
+):
+    query = f"""UPDATE TABLE MAGAZYN
+            SET POJEMNOSC = {pojemnosc},
+                ADRES = '{adres}',
+            WHERE ID_APTEKA = {id_apteki} and
+                ID_LEKARSTWO = {id_lek}; """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_admin(
+    id,
+    placa
+):
+    query = f"""UPDATE TABLE ADMIN
+            SET placa = {placa}
+            WHERE id = {id}; """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_klient(
+    id,
+    zakup
+):
+    query = f"""UPDATE TABLE KLIENT
+            SET POPRZEDNI_ZAKUP = '{zakup}'
+            WHERE id = {id}; """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_farmaceuta(
+    id,
+    placa,
+    wyksztalcenie
+):
+    query = f"""UPDATE TABLE FARMACEUTA
+            SET PLACA = {placa},
+                WYKSZTALCENIE = '{wyksztalcenie}'
+            WHERE id = {id}; """
+    mycursor.execute(query)
+    mydb.commit()
+
+def update_osoba(
+    id,
+    nazwisko,
+    imie,
+    data_ur,
+    telefon,
+    email,
+    adres
+):
+    query = f"""UPDATE TABLE OSOBA
+            SET NAZWISKO = '{nazwisko}',
+                IMIE = '{imie}',
+                DATA_URODZENIA = '{data_ur}',
+                TELEFON = {telefon},
+                EMAIL = '{email}',
+                ADRES = '{adres}'
+            WHERE id = {id}; """
+    mycursor.execute(query)
+    mydb.commit()
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=8888)
