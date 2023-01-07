@@ -3,6 +3,8 @@ from flask import Flask, request, jsonify, render_template, redirect
 from flask_bootstrap import Bootstrap
 # from sqlalchemy.orm import relationship
 import mysql.connector
+from update import Update
+from insert import Insert
 
 app = Flask(__name__)
 
@@ -16,6 +18,8 @@ mydb=mysql.connector.connect(
 )
 
 mycursor=mydb.cursor()
+update = Update(mycursor)
+insert = Insert(mycursor)
 #for data in records:
     #print(data)
 
@@ -99,154 +103,9 @@ def show_table_administrator_to_adm():
         data_administratorzy = mycursor.fetchall()
         return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy)
 
-def update_dyzur(
-    id_farm,
-    id_apteki,
-    dzien,
-    godz_od,
-    godz_do
-):
-    query = f"""UPDATE TABLE DYZUR
-            SET godz_od = {godz_od},
-                godz_do = {godz_do}
-            WHERE DZIEN = '{dzien}' and
-            ID_FARMACEUTA = {id_farm} and
-            ID_APTEKA = {id_apteki};"""
-    mycursor.execute(query)
-    mydb.commit()
-    
-def update_apteka(
-    id,
-    nazwa,
-    godz_od,
-    godz_do,
-    adres,
-    telefon
-):
-    query = f"""UPDATE TABLE APTEKA
-            SET nazwa = '{nazwa}',
-                godz_od = {godz_od},
-                godz_do = {godz_do},
-                adres = '{adres}',
-                telefon = {telefon}
-            WHERE id = {id};"""
-    mycursor.execute(query)
-    mydb.commit()
 
-def update_lek(
-    id,
-    nazwa,
-    recepta
-):
-    query = f"""UPDATE TABLE LEK
-            SET nazwa = '{nazwa}',
-                recepta = {recepta}
-            WHERE id = {id}; """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_miasto(
-    id,
-    nazwa,
-    kod
-):
-    query = f"""UPDATE TABLE MIASTO
-            SET nazwa = '{nazwa}',
-                kod = '{kod}'
-            WHERE id = {id} """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_lekarstwa(
-    id_zam, 
-    id_lek,
-    ilosc
-):
-    query = f"""UPDATE TABLE LEKARSTWA
-            SET ilosc = {ilosc},
-            WHERE ID_ZAMOWIENIE = {id_zam} and
-                ID_LEKARSTWO = {id_lek}; """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_zamowienie(
-    id,
-    status,
-    data_zam
-):
-    query = f"""UPDATE TABLE ZAMOWIENIE
-            SET status '{status}',
-                DATA_ZAMOWIENIA = '{data_zam}'
-            WHERE id = {id} """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_magazyn(
-    pojemnosc,
-    adres,
-    id_apteki,
-    id_lek
-):
-    query = f"""UPDATE TABLE MAGAZYN
-            SET POJEMNOSC = {pojemnosc},
-                ADRES = '{adres}',
-            WHERE ID_APTEKA = {id_apteki} and
-                ID_LEKARSTWO = {id_lek}; """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_admin(
-    id,
-    placa
-):
-    query = f"""UPDATE TABLE ADMIN
-            SET placa = {placa}
-            WHERE id = {id}; """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_klient(
-    id,
-    zakup
-):
-    query = f"""UPDATE TABLE KLIENT
-            SET POPRZEDNI_ZAKUP = '{zakup}'
-            WHERE id = {id}; """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_farmaceuta(
-    id,
-    placa,
-    wyksztalcenie
-):
-    query = f"""UPDATE TABLE FARMACEUTA
-            SET PLACA = {placa},
-                WYKSZTALCENIE = '{wyksztalcenie}'
-            WHERE id = {id}; """
-    mycursor.execute(query)
-    mydb.commit()
-
-def update_osoba(
-    id,
-    nazwisko,
-    imie,
-    data_ur,
-    telefon,
-    email,
-    adres
-):
-    query = f"""UPDATE TABLE OSOBA
-            SET NAZWISKO = '{nazwisko}',
-                IMIE = '{imie}',
-                DATA_URODZENIA = '{data_ur}',
-                TELEFON = {telefon},
-                EMAIL = '{email}',
-                ADRES = '{adres}'
-            WHERE id = {id}; """
-    mycursor.execute(query)
-    mydb.commit()
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=8888)
+    
 
