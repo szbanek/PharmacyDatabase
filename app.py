@@ -49,15 +49,15 @@ def watch_farmaceuta():
 @app.route("/modify", methods=['GET', 'POST'])
 def modify_lek():
     if request.method == "POST":
-        id = [request.form['id_apteka']]
-        nazwa = [request.form['nazwa_apteka']]
-        recepta = [request.form['recepta_apteka']]
+        id = request.form['id_apteka']
+        nazwa = request.form['nazwa_apteka']
+        recepta = request.form['recepta_apteka']
 
 
         update.lek(id,nazwa,recepta)
 
-        mycursor.session.commit()
-        #return render_template('index.html')
+        mydb.commit()
+        return render_template('index.html')
     else:
        return render_template('modyfikacja_listy_lekow.html')
 

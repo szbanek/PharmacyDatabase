@@ -1,5 +1,6 @@
 import mysql.connector
 
+
 class Insert():
     def __init__(self, cursor):
         self.__cursor = cursor
@@ -12,7 +13,7 @@ class Insert():
         godz_od,
         godz_do
     ):
-        query = f"""INSERT INTO TABLE DYZUR
+        query = f"""INSERT INTO DYZUR
                 (
                     DZIEN,
                     GODZ_OD,
@@ -22,15 +23,14 @@ class Insert():
                 )
                 VALUES
                 (
-                    {dzien},
+                    '{dzien}',
                     {godz_od},
                     {godz_do},
                     {id_farmaceuta},
                     {id_apteki}
                 );"""
         self.__cursor.execute(query)
-        self.__connection.commit()
-        
+
     def apteka(
         self,
         nazwa,
@@ -39,7 +39,7 @@ class Insert():
         adres,
         telefon
     ):
-        query = f"""INSERT INTO TABLE APTEKA
+        query = f"""INSERT INTO APTEKA
                 (
                     NAZWA,
                     GODZ_OD,
@@ -49,58 +49,55 @@ class Insert():
                 )
                 VALUES
                 (
-                    {nazwa},
+                    '{nazwa}',
                     {godz_od},
                     {godz_do},
-                    {adres},
+                    '{adres}',
                     {telefon}
                 );"""
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def lek(
         self,
         nazwa,
         recepta
     ):
-        query = f"""INSERT INTO TABLE LEK
+        query = f"""INSERT INTO LEK
                 (
                     NAZWA,
                     RECEPTA
                 )
                 VALUES
                 (
-                    {nazwa},
+                    '{nazwa}',
                     {recepta}
                 ); """
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def miasto(
         self,
         nazwa,
         kod
     ):
-        query = f"""INSERT INTO TABLE MIASTO
+        query = f"""INSERT INTO MIASTO
                 (
                     NAZWA,
                     KOD
                 )
                 VALUES
                 (
-                    {nazwa},
-                    {kod}
+                    '{nazwa}',
+                    '{kod}'
                 ); """
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def lekarstwa(
         self,
-        id_zam, 
+        id_zam,
         id_lek,
         ilosc
     ):
-        query = f"""INSERT INTO TABLE LEKARSTWA
+        query = f"""INSERT INTO LEKARSTWA
                 (
                     ILOSC,
                     ID_ZAMOWIENIE,
@@ -113,7 +110,6 @@ class Insert():
                     {id_lek}
                 );"""
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def zamowienie(
         self,
@@ -121,7 +117,7 @@ class Insert():
         data_zam,
         id_klient
     ):
-        query = f"""INSERT INTO TABLE ZAMOWIENIE
+        query = f"""INSERT INTO ZAMOWIENIE
                 (
                     STATUS,
                     DATA_ZAMOWIENIE,
@@ -129,12 +125,11 @@ class Insert():
                 )
                 VALUES
                 (
-                    {status},
-                    {data_zam},
+                    '{status}',
+                    '{data_zam}',
                     {id_klient}
                 );"""
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def magazyn(
         self,
@@ -143,7 +138,7 @@ class Insert():
         id_apteki,
         id_lek
     ):
-        query = f"""INSERT INTO TABLE MAGAZYN
+        query = f"""INSERT INTO MAGAZYN
                 (
                     POJEMNOSC,
                     ADRES,
@@ -153,19 +148,18 @@ class Insert():
                 VALUES
                 (
                     {pojemnosc},
-                    {adres},
+                    '{adres}',
                     {id_apteki},
                     {id_lek}
                 ); """
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def admin(
         self,
         id,
         placa
     ):
-        query = f"""INSERT INTO TABLE ADMINISTRATOR
+        query = f"""INSERT INTO ADMINISTRATOR
                 (
                     ID,
                     PLACA
@@ -176,14 +170,13 @@ class Insert():
                     {placa}
                 );"""
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def klient(
         self,
         id,
         zakup
     ):
-        query = f"""INSERT INTO TABLE KLIENT
+        query = f"""INSERT INTO KLIENT
                 (
                     ID,
                     POPRZEDNI_ZAKUP
@@ -191,10 +184,9 @@ class Insert():
                 VALUES
                 (
                     {id},
-                    {zakup}
+                    '{zakup}'
                 );"""
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def farmaceuta(
         self,
@@ -202,7 +194,7 @@ class Insert():
         placa,
         wyksztalcenie
     ):
-        query = f"""INSERT INTO TABLE FARMACEUTA
+        query = f"""INSERT INTO FARMACEUTA
                 (
                     ID,
                     PLACA,
@@ -212,10 +204,9 @@ class Insert():
                 (
                     {id},
                     {placa},
-                    {wyksztalcenie}
+                    '{wyksztalcenie}'
                 ); """
         self.__cursor.execute(query)
-        self.__connection.commit()
 
     def osoba(
         self,
@@ -226,7 +217,7 @@ class Insert():
         email,
         adres
     ):
-        query = f"""INSERT INTO TABLE OSOBA
+        query = f"""INSERT INTO OSOBA
                 (
                     NAZWISKO,
                     IMIE,
@@ -237,12 +228,11 @@ class Insert():
                 )
                 VALUS
                 (
-                    {nazwisko},
-                    {imie},
-                    {data_ur},
+                    '{nazwisko}',
+                    '{imie}',
+                    '{data_ur}',
                     {telefon},
-                    {email},
-                    {adres}
+                    '{email}',
+                    '{adres}'
                 ); """
         self.__cursor.execute(query)
-        self.__connection.commit()
