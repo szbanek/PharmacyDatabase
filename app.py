@@ -37,43 +37,118 @@ headings_administratorzy = ("ID", "PLACA")
 def index():
     return render_template('index.html')
 
-@app.route("/watch")
-def watch():
+@app.route("/watch_administrator")
+def watch_adm():
     return render_template('watch_database_administrator.html')
 
 
-@app.route("/apteki")
+@app.route("/watch_farmaceuta")
+def watch_farmaceuta():
+    return render_template('watch_database_farmaceuta.html')
+
+@app.route("/modify", methods=['GET', 'POST'])
+def modify_lek():
+    if request.method == "POST":
+        id = [request.form['id_apteka']]
+        nazwa = [request.form['nazwa_apteka']]
+        recepta = [request.form['recepta_apteka']]
+
+
+        update.lek(id,nazwa,recepta)
+
+        mycursor.session.commit()
+        #return render_template('index.html')
+    else:
+       return render_template('modyfikacja_listy_lekow.html')
+
+
+
+@app.route("/apteki", methods=['GET', 'POST'])
 def show_table_apteka_to_adm():
-    mycursor.execute("select * from APTEKA")
-    data_apteka = mycursor.fetchall()
-    return render_template('watch_database_administrator_apteka.html', headings=headings_apteka, data=data_apteka)
+    if request.method == "POST":
+        nazwa = [request.form['Apteka']]
+        mycursor.execute("SELECT * FROM APTEKA WHERE NAZWA = %s", nazwa)
+        data_apteka = mycursor.fetchall()
+        return render_template('watch_database_administrator_apteka.html', headings=headings_apteka, data=data_apteka)
+    else:
+        mycursor.execute("select * from APTEKA")
+        data_apteka = mycursor.fetchall()
+        return render_template('watch_database_administrator_apteka.html', headings=headings_apteka, data=data_apteka)
 
-@app.route("/dyzury")
+@app.route("/dyzury", methods=['GET', 'POST'])
 def show_table_dyzury_to_adm():
-    mycursor.execute("select * from DYZUR")
-    data_dyzury = mycursor.fetchall()
-    return render_template('watch_database_administrator_dyzury.html', headings=headings_dyzury, data=data_dyzury)
+    if request.method == "POST":
+        Day = [request.form['Dyzur']]
+        mycursor.execute("SELECT * FROM DYZUR WHERE DZIEN = %s", Day)
+        data_dyzury = mycursor.fetchall()
+        return render_template('watch_database_administrator_dyzury.html', headings=headings_dyzury, data=data_dyzury)
+    else:
+        mycursor.execute("select * from DYZUR")
+        data_dyzury = mycursor.fetchall()
+        return render_template('watch_database_administrator_dyzury.html', headings=headings_dyzury, data=data_dyzury)
 
-@app.route("/farmaceuci")
+@app.route("/farmaceuci", methods=['GET', 'POST'])
 def show_table_farmaceuta_to_adm():
-    mycursor.execute("select * from FARMACEUTA")
-    data_farmaceuci = mycursor.fetchall()
-    return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci)
+    if request.method == "POST":
+        id = [request.form['Farmaceuta']]
+        mycursor.execute("SELECT * FROM FARMACEUTA WHERE ID = %s", id)
+        data_farmaceuci = mycursor.fetchall()
+        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci)
+    else:
+        mycursor.execute("select * from FARMACEUTA")
+        data_farmaceuci = mycursor.fetchall()
+        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci)
 
-@app.route("/klienci")
+@app.route("/klienci_administrator", methods=['GET', 'POST'])
 def show_table_klient_to_adm():
-    mycursor.execute("select * from KLIENT")
-    data_klienci = mycursor.fetchall()
-    return render_template('watch_database_administrator_klienci.html', headings=headings_klienci, data=data_klienci)
+    if request.method == "POST":
+        id = [request.form['Klient']]
+        mycursor.execute("SELECT * FROM KLIENT WHERE ID = %s", id)
+        data_klienci = mycursor.fetchall()
+        return render_template('watch_database_administrator_klienci.html', headings=headings_klienci, data=data_klienci)
+    else:
+        mycursor.execute("select * from KLIENT")
+        data_klienci = mycursor.fetchall()
+        return render_template('watch_database_administrator_klienci.html', headings=headings_klienci, data=data_klienci)
 
-@app.route("/zamowienia")
+@app.route("/klienci_farmaceuta", methods=['GET', 'POST'])
+def show_table_klient_to_fmc():
+    if request.method == "POST":
+        id = [request.form['Klient_farmaceuta']]
+        mycursor.execute("SELECT * FROM KLIENT WHERE ID = %s", id)
+        data_klienci = mycursor.fetchall()
+        return render_template('watch_database_farmaceuta_klienci.html', headings=headings_klienci, data=data_klienci)
+    else:
+        mycursor.execute("select * from KLIENT")
+        data_klienci = mycursor.fetchall()
+        return render_template('watch_database_farmaceuta_klienci.html', headings=headings_klienci, data=data_klienci)
+
+
+@app.route("/zamowienia_administrator", methods=['GET', 'POST'])
 def show_table_zamowienia_to_adm():
-    mycursor.execute("select * from ZAMOWIENIE")
-    data_zamowienia = mycursor.fetchall()
-    return render_template('watch_database_administrator_zamowienia.html', headings=headings_zamowienia, data=data_zamowienia)
+    if request.method == "POST":
+        id = [request.form['Zamowienie']]
+        mycursor.execute("SELECT * FROM ZAMOWIENIE WHERE ID = %s", id)
+        data_zamowienia = mycursor.fetchall()
+        return render_template('watch_database_administrator_zamowienia.html', headings=headings_zamowienia, data=data_zamowienia)
+    else:
+        mycursor.execute("select * from ZAMOWIENIE")
+        data_zamowienia = mycursor.fetchall()
+        return render_template('watch_database_administrator_zamowienia.html', headings=headings_zamowienia, data=data_zamowienia)
 
+@app.route("/zamowienia_farmaceuta", methods=['GET', 'POST'])
+def show_table_zamowienia_to_fmc():
+    if request.method == "POST":
+        id = [request.form['Zamowienie_farmaceuta']]
+        mycursor.execute("SELECT * FROM ZAMOWIENIE WHERE ID = %s", id)
+        data_zamowienia = mycursor.fetchall()
+        return render_template('watch_database_farmaceuta_zamowienia.html', headings=headings_zamowienia, data=data_zamowienia)
+    else:
+        mycursor.execute("select * from ZAMOWIENIE")
+        data_zamowienia = mycursor.fetchall()
+        return render_template('watch_database_farmaceuta_zamowienia.html', headings=headings_zamowienia, data=data_zamowienia)
 
-@app.route("/leki", methods=['GET', 'POST'])
+@app.route("/leki_administrator", methods=['GET', 'POST'])
 def show_table_lek_to_adm():
     if request.method == "POST":
         nazwa = [request.form['LEK']]
@@ -85,11 +160,29 @@ def show_table_lek_to_adm():
         data_lek = mycursor.fetchall()
         return render_template('watch_database_administrator_lek.html', headings=headings_lek, data=data_lek)
 
-@app.route("/magazyny")
+@app.route("/leki_farmaceuta", methods=['GET', 'POST'])
+def show_table_lek_to_fmc():
+    if request.method == "POST":
+        nazwa = [request.form['LEK_farmaceuta']]
+        mycursor.execute("SELECT ID,NAZWA,RECEPTA FROM LEK WHERE NAZWA = %s", nazwa)
+        data_lek = mycursor.fetchall()
+        return render_template('watch_database_farmaceuta_leki.html', headings=headings_lek, data=data_lek)
+    else:
+        mycursor.execute("select * from LEK")
+        data_lek = mycursor.fetchall()
+        return render_template('watch_database_farmaceuta_leki.html', headings=headings_lek, data=data_lek)
+
+@app.route("/magazyny", methods=['GET', 'POST'])
 def show_table_magazyn_to_adm():
-    mycursor.execute("select * from MAGAZYN")
-    data_magazyny = mycursor.fetchall()
-    return render_template('watch_database_administrator_magazyny.html', headings=headings_magazyny, data=data_magazyny)
+    if request.method == "POST":
+        adres = [request.form['Magazyn']]
+        mycursor.execute("SELECT * FROM MAGAZYN WHERE ADRES = %s", adres)
+        data_magazyny = mycursor.fetchall()
+        return render_template('watch_database_administrator_magazyny.html', headings=headings_magazyny, data=data_magazyny)
+    else:
+        mycursor.execute("select * from MAGAZYN")
+        data_magazyny = mycursor.fetchall()
+        return render_template('watch_database_administrator_magazyny.html', headings=headings_magazyny, data=data_magazyny)
 
 @app.route("/administratorzy", methods=['GET', 'POST'])
 def show_table_administrator_to_adm():

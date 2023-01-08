@@ -47,9 +47,9 @@ class Update():
         recepta
     ):
         query = f"""UPDATE TABLE LEK
-                SET nazwa = '{nazwa}',
-                    recepta = {recepta}
-                WHERE id = {id}; """
+                    SET NAZWA = {nazwa},
+                    RECEPTA = {recepta}
+                    WHERE ID ={id}"""
         self.__cursor.execute(query)
         self.__connection.commit()
 
