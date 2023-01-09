@@ -5,6 +5,7 @@ from flask_bootstrap import Bootstrap
 import mysql.connector
 from update import Update
 from insert import Insert
+from delete import Delete
 
 app = Flask(__name__)
 
@@ -20,6 +21,7 @@ mydb=mysql.connector.connect(
 mycursor=mydb.cursor()
 update = Update(mycursor)
 insert = Insert(mycursor)
+delete = Delete(mycursor)
 #for data in records:
     #print(data)
 
