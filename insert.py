@@ -120,7 +120,7 @@ class Insert():
         query = f"""INSERT INTO ZAMOWIENIE
                 (
                     STATUS,
-                    DATA_ZAMOWIENIE,
+                    DATA_ZAMOWIENIA,
                     ID_KLIENT
                 )
                 VALUES

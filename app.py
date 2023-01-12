@@ -48,21 +48,38 @@ def watch_adm():
 def watch_farmaceuta():
     return render_template('watch_database_farmaceuta.html')
 
-@app.route("/modify", methods=['GET', 'POST'])
+@app.route("/modify_lek", methods=['GET', 'POST'])
 def modify_lek():
     if request.method == "POST":
-        id = request.form['id_apteka']
-        nazwa = request.form['nazwa_apteka']
-        recepta = request.form['recepta_apteka']
+        if 'id_lek_zmien' and 'nazwa_lek_zmien' and 'recepta_lek_zmien' in request.form:
+            id = request.form['id_lek_zmien']
+            nazwa = request.form['nazwa_lek_zmien']
+            recepta = request.form['recepta_lek_zmien']
 
+            update.lek(id,nazwa,recepta)
 
-        update.lek(id,nazwa,recepta)
+            mydb.commit()
 
-        mydb.commit()
-        return render_template('index.html')
+            return render_template('index.html')
+        elif 'id_lek_dodaj' and 'nazwa_lek_dodaj' and 'recepta_lek_dodaj' in request.form:
+            nazwa = request.form['nazwa_lek_dodaj']
+            recepta = request.form['recepta_lek_dodaj']
+
+            insert.lek(nazwa, recepta)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_lek_usun' and 'nazwa_lek_usun' and 'recepta_lek_usun' in request.form:
+            id = request.form['id_lek_usun']
+
+            delete.lek(id)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_listy_lekow.html')
     else:
        return render_template('modyfikacja_listy_lekow.html')
-
 
 
 @app.route("/apteki", methods=['GET', 'POST'])
@@ -101,6 +118,41 @@ def show_table_farmaceuta_to_adm():
         data_farmaceuci = mycursor.fetchall()
         return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci)
 
+
+@app.route("/modify_klient", methods=['GET', 'POST'])
+def modify_klient():
+    if request.method == "POST":
+        if 'id_klient_zmien' and 'poprzedni_zakup_klient_zmien' in request.form:
+            id = request.form['id_klient_zmien']
+            poprzedni_zakup = request.form['poprzedni_zakup_klient_zmien']
+
+
+            update.klient(id,poprzedni_zakup)
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'id_klient_dodaj' and 'poprzedni_zakup_klient_dodaj' in request.form:
+            id = request.form['id_klient_dodaj']
+            poprzedni_zakup = request.form['poprzedni_zakup_klient_dodaj']
+
+            insert.klient(id, poprzedni_zakup)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_klient_usun' and 'poprzedni_zakup_klient_usun' in request.form:
+            id = request.form['id_klient_usun']
+
+            delete.klient(id)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_listy_klientow.html')
+    else:
+       return render_template('modyfikacja_listy_klientow.html')
+
+
 @app.route("/klienci_administrator", methods=['GET', 'POST'])
 def show_table_klient_to_adm():
     if request.method == "POST":
@@ -124,6 +176,44 @@ def show_table_klient_to_fmc():
         mycursor.execute("select * from KLIENT")
         data_klienci = mycursor.fetchall()
         return render_template('watch_database_farmaceuta_klienci.html', headings=headings_klienci, data=data_klienci)
+
+
+@app.route("/modify_zamowienia", methods=['GET', 'POST'])
+def modify_zamowienia():
+    if request.method == "POST":
+        if 'id_zamowienia_zmien' and 'status_zamowienia_zmien' and 'data_zamowienia_zmien' and 'id_klienta_zamowienia_zmien' in request.form:
+            id = request.form['id_zamowienia_zmien']
+            status = request.form['status_zamowienia_zmien']
+            data_zam = request.form['data_zamowienia_zmien']
+            id_klienta = request.form['id_klienta_zamowienia_zmien']
+
+            update.zamowienie(id,status,data_zam, id_klienta)
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'status_zamowienia_dodaj' and 'data_zamowienia_dodaj' and 'id_klienta_zamowienia_dodaj' in request.form:
+
+            status = request.form['status_zamowienia_dodaj']
+            data_zam = request.form['data_zamowienia_dodaj']
+            id_klienta = request.form['id_klienta_zamowienia_dodaj']
+
+            insert.zamowienie(status,data_zam, id_klienta)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_zamowienia_usun' in request.form:
+            id = request.form['id_zamowienia_usun']
+
+            delete.zamowienie(id)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_zamowienia.html')
+    else:
+       return render_template('modyfikacja_zamowienia.html')
+
 
 
 @app.route("/zamowienia_administrator", methods=['GET', 'POST'])
