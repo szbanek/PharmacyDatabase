@@ -81,6 +81,43 @@ def modify_lek():
     else:
        return render_template('modyfikacja_listy_lekow.html')
 
+@app.route("/modify_apteka", methods=['GET', 'POST'])
+def modify_apteka():
+    if request.method == "POST":
+        if 'id_apteka_zmien' and 'nazwa_apteka_zmien' and 'godz_od_apteka_zmien' and 'godz_do_apteka_zmien' and 'adres_apteka_zmien' and 'telefon_apteka_zmien' in request.form:
+            id = request.form['id_apteka_zmien']
+            nazwa = request.form['nazwa_apteka_zmien']
+            godz_od = request.form['godz_od_apteka_zmien']
+            godz_do = request.form['godz_do_apteka_zmien']
+            adres = request.form['adres_apteka_zmien']
+            telefon = request.form['telefon_apteka_zmien']
+            update.apteka(id,nazwa,godz_od,godz_do,adres,telefon)
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'nazwa_apteka_dodaj' and 'godz_od_apteka_dodaj' and 'godz_do_apteka_dodaj' and 'adres_apteka_dodaj' and 'telefon_apteka_dodaj' in request.form:
+            nazwa = request.form['nazwa_apteka_dodaj']
+            godz_od = request.form['godz_od_apteka_dodaj']
+            godz_do = request.form['godz_do_apteka_dodaj']
+            adres = request.form['adres_apteka_dodaj']
+            telefon = request.form['telefon_apteka_dodaj']
+
+            insert.apteka(nazwa,godz_od,godz_do,adres,telefon)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_apteka_usun' in request.form:
+            id = request.form['id_apteka_usun']
+
+            delete.apteka(id)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_listy_aptek.html')
+    else:
+       return render_template('modyfikacja_listy_aptek.html')
 
 @app.route("/apteki", methods=['GET', 'POST'])
 def show_table_apteka_to_adm():
