@@ -106,7 +106,7 @@ BEGIN
 	WHERE ID = klient_ID;
 	INSERT INTO ZAMOWIENIE
 	(STATUS, DATA_ZAMOWIENIA, ID_KLIENT)
-	VALUES("DO REALIZACJI", new_date, klient_ID);
+	VALUES(status, new_date, klient_ID);
 END$$
 DELIMITER ;
 
