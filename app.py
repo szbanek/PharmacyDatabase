@@ -131,6 +131,48 @@ def show_table_apteka_to_adm():
         data_apteka = mycursor.fetchall()
         return render_template('watch_database_administrator_apteka.html', headings=headings_apteka, data=data_apteka)
 
+
+@app.route("/modify_dyzury", methods=['GET', 'POST'])
+def modify_dyzury():
+    if request.method == "POST":
+        if 'dzien_dyzur_zmien' and 'godz_od_dyzur_zmien' and 'godz_do_dyzur_zmien' and 'id_farmaceuta_dyzur_zmien' and 'id_apteka_dyzur_zmien' in request.form:
+            dzien = request.form['dzien_dyzur_zmien']
+            godz_od = request.form['godz_od_dyzur_zmien']
+            godz_do = request.form['godz_do_dyzur_zmien']
+            id_farmaceuta = request.form['id_farmaceuta_dyzur_zmien']
+            id_apteka = request.form['id_apteka_dyzur_zmien']
+
+            update.dyzur(id_farmaceuta,id_apteka,dzien,godz_od, godz_do)
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'dzien_dyzur_dodaj' and 'godz_od_dyzur_dodaj' and 'godz_do_dyzur_dodaj' and 'id_farmaceuta_dyzur_dodaj' and 'id_apteka_dyzur_dodaj' in request.form:
+            dzien = request.form['dzien_dyzur_dodaj']
+            godz_od = request.form['godz_od_dyzur_dodaj']
+            godz_do = request.form['godz_do_dyzur_dodaj']
+            id_farmaceuta = request.form['id_farmaceuta_dyzur_dodaj']
+            id_apteka = request.form['id_apteka_dyzur_dodaj']
+
+            insert.dyzur(id_farmaceuta,id_apteka,dzien,godz_od, godz_do)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'dzien_dyzur_usun' and 'id_farmaceuta_dyzur_usun' and 'id_apteka_dyzur_usun' in request.form:
+            dzien = request.form['dzien_dyzur_usun']
+            id_farmaceuta = request.form['id_farmaceuta_dyzur_usun']
+            id_apteka = request.form['id_apteka_dyzur_usun']
+
+            delete.dyzur(id_farmaceuta, id_apteka, dzien)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_dyzurow.html')
+    else:
+       return render_template('modyfikacja_dyzurow.html')
+
+
 @app.route("/dyzury", methods=['GET', 'POST'])
 def show_table_dyzury_to_adm():
     if request.method == "POST":
@@ -301,6 +343,45 @@ def show_table_lek_to_fmc():
         data_lek = mycursor.fetchall()
         return render_template('watch_database_farmaceuta_leki.html', headings=headings_lek, data=data_lek)
 
+
+@app.route("/modify_magazyn", methods=['GET', 'POST'])
+def modify_magazyn():
+    if request.method == "POST":
+        if 'pojemnosc_magazyn_zmien' and 'adres_magazyn_zmien' and 'id_apteka_magazyn_zmien' and 'id_lekarstwo_magazyn_zmien' in request.form:
+            pojemnosc = request.form['pojemnosc_magazyn_zmien']
+            adres = request.form['adres_magazyn_zmien']
+            id_apteka = request.form['id_apteka_magazyn_zmien']
+            id_lekarstwo = request.form['id_lekarstwo_magazyn_zmien']
+
+            update.magazyn(pojemnosc,adres, id_apteka, id_lekarstwo )
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'pojemnosc_magazyn_dodaj' and 'adres_magazyn_dodaj' and 'id_apteka_magazyn_dodaj' and 'id_lekarstwo_magazyn_dodaj' in request.form:
+            pojemnosc = request.form['pojemnosc_magazyn_dodaj']
+            adres = request.form['adres_magazyn_dodaj']
+            id_apteka = request.form['id_apteka_magazyn_dodaj']
+            id_lekarstwo = request.form['id_lekarstwo_magazyn_dodaj']
+
+            insert.magazyn(pojemnosc, adres, id_apteka, id_lekarstwo)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_apteka_magazyn_usun' and 'id_lekarstwo_magazyn_usun' in request.form:
+            id_apteka = request.form['id_apteka_magazyn_usun']
+            id_lekarstwo = request.form['id_lekarstwo_magazyn_usun']
+
+            delete.magazyn(id_apteka, id_lekarstwo)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_listy_magazynow.html')
+    else:
+       return render_template('modyfikacja_listy_magazynow.html')
+
+
 @app.route("/magazyny", methods=['GET', 'POST'])
 def show_table_magazyn_to_adm():
     if request.method == "POST":
@@ -325,7 +406,46 @@ def show_table_administrator_to_adm():
         data_administratorzy = mycursor.fetchall()
         return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy)
 
+@app.route("/modify_osoba", methods=['GET', 'POST'])
+def modify_osoba():
+    if request.method == "POST":
+        if 'id_osoba_zmien' and 'nazwisko_osoba_zmien' and 'imie_osoba_zmien' and 'dataur_osoba_zmien' and 'telefon_osoba_zmien' and 'email_osoba_zmien' and 'adres_osoba_zmien' in request.form:
+            id = request.form['id_osoba_zmien']
+            nazwisko = request.form['nazwisko_osoba_zmien']
+            imie = request.form['imie_osoba_zmien']
+            data_ur = request.form['dataur_osoba_zmien']
+            telefon = request.form['telefon_osoba_zmien']
+            email = request.form['email_osoba_zmien']
+            adres = request.form['adres_osoba_zmien']
 
+            update.osoba(id,nazwisko,imie, data_ur, telefon, email, adres)
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
+            nazwisko = request.form['nazwisko_osoba_dodaj']
+            imie = request.form['imie_osoba_dodaj']
+            data_ur = request.form['dataur_osoba_dodaj']
+            telefon = request.form['telefon_osoba_dodaj']
+            email = request.form['email_osoba_dodaj']
+            adres = request.form['adres_osoba_dodaj']
+
+            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_osoba_usun' in request.form:
+            id = request.form['id_osoba_usun']
+
+            delete.osoba(id)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_listy_osob.html')
+    else:
+       return render_template('modyfikacja_listy_osob.html')
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=8888)

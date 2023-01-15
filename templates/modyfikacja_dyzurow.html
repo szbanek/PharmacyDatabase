@@ -1,0 +1,110 @@
+{% extends 'base.html'%}
+{% block title %}
+    Modify
+{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="toppane">
+      <h1>Proszę o wybranie operacji</h1>
+  </div>
+<div/>
+<div class="container">
+  <div class="d-flex">
+    <div class="leftpane">
+          <h1>Dodaj</h1>
+            <div class="color" style="black">
+                <div class="container-fluid" >
+                    <div class="col-md-3">
+                        <div  class="col-md-3">
+                            <form class="example" method="post" action="">
+                                    <label>
+                                        ID Farmaceuty:<input type="number" style="height:50px; width:150px" name="id_farmaceuta_dyzur_dodaj"/>
+                                    </label>
+                                    <label>
+                                        ID Apteki: <input type="number" style="height:50px; width:150px"name="id_apteka_dyzur_dodaj"/>
+                                     </label>
+                                    <label>
+                                        Dzień:<input type="text" style="height:50px; width:150px" name="dzien_dyzur_dodaj"/>
+                                    </label>
+                                    <label>
+                                        Godzina otwarcia:<input type="number" style="height:50px; width:150px" name="godz_od_dyzur_dodaj"/>
+                                     </label>
+                                    <label>
+                                        Godzina zamknięcia:<input type="number" style="height:50px; width:150px" name="godz_do_dyzur_dodaj"/>
+                                     </label>
+                                    <label>
+                                        <button type="submit" style="height:50px; width:150px">Submit</button>
+                                    </label>
+                            </form>
+                        <div/>
+                    <div/>
+                <div/>
+            <div/>
+          <div/>
+    </div>
+<dev/>
+<div class="container">
+    <div class="middlepane">
+       <h1>Usuń</h1>
+        <div class="color" style="black">
+            <div class="container-fluid" >
+                <div class="col-md-3">
+                    <div  class="col-md-3">
+                        <form class="example" method="post" action="">
+                            <label>
+                                ID Farmaceuty:<input type="number" style="height:50px; width:150px" name="id_farmaceuta_dyzur_usun"/>
+                            </label>
+                            <label>
+                                ID Apteki: <input type="number" style="height:50px; width:150px"name="id_apteka_dyzur_usun"/>
+                            </label>
+                            <label>
+                                Dzień:<input type="text" style="height:50px; width:150px" name="dzien_dyzur_usun"/>
+                            </label>
+                            <label>
+                                <button type="submit" style="height:50px; width:150px">Submit</button>
+                            </label>
+                        </form>
+                    <div/>
+                <div/>
+            <div/>
+        <div/>
+    </div>
+<end/>
+<div class="container">
+    <div class="rightpane">
+      <h1>Zmień</h1>
+        <div class="color" style="black">
+            <div class="container-fluid" >
+                <div class="col-md-3">
+                    <div  class="col-md-3">
+                        <form  class="example" method="post" action="">
+                            <label>
+                                ID Farmaceuty:<input type="number" style="height:50px; width:150px" name="id_farmaceuta_dyzur_zmien"/>
+                            </label>
+                            <label>
+                                ID Apteki: <input type="number" style="height:50px; width:150px"name="id_apteka_dyzur_zmien"/>
+                            </label>
+                            <label>
+                                Dzień:<input type="text" style="height:50px; width:150px" name="dzien_dyzur_zmien"/>
+                            </label>
+                            <label>
+                                Godzina otwarcia:<input type="number" style="height:50px; width:150px" name="godz_od_dyzur_zmien"/>
+                            </label>
+                            <label>
+                                Godzina zamknięcia:<input type="number" style="height:50px; width:150px" name="godz_do_dyzur_zmien"/>
+                            </label>
+                            <label>
+                                <button type="submit" style="height:50px; width:150px">Submit</button>
+                            </label>
+                        </form>
+                    <div/>
+                <div/>
+            <div/>
+        <div/>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

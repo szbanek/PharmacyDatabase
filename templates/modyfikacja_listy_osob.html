@@ -1,0 +1,113 @@
+{% extends 'base.html'%}
+{% block title %}
+    Modify
+{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="toppane">
+      <h1>Proszę o wybranie operacji</h1>
+  </div>
+<div/>
+<div class="container">
+  <div class="d-flex">
+    <div class="leftpane">
+          <h1>Dodaj</h1>
+            <div class="color" style="black">
+                <div class="container-fluid" >
+                    <div class="col-md-3">
+                        <div  class="col-md-3">
+                            <form class="example" method="post" action="">
+                                    <label>
+                                        Nazwisko:<input type="text" style="height:50px; width:150px" name="nazwisko_osoba_dodaj"/>
+                                    </label>
+                                    <label>
+                                        Imię: <input type="text" style="height:50px; width:150px"name="imie_osoba_dodaj"/>
+                                     </label>
+                                    <label>
+                                        Data urodzenia:<input type="text" style="height:50px; width:150px" name="dataur_osoba_dodaj"/>
+                                    </label>
+                                    <label>
+                                        Telefon:<input type="number" style="height:50px; width:150px" name="telefon_osoba_dodaj"/>
+                                     </label>
+                                    <label>
+                                        Email:<input type="text" style="height:50px; width:150px" name="email_osoba_dodaj"/>
+                                    </label>
+                                    <label>
+                                        Adres:<input type="text" style="height:50px; width:150px" name="adres_osoba_dodaj"/>
+                                    </label>
+                                    <label>
+                                        <button type="submit" style="height:50px; width:150px">Submit</button>
+                                    </label>
+                            </form>
+                        <div/>
+                    <div/>
+                <div/>
+            <div/>
+          <div/>
+    </div>
+<dev/>
+<div class="container">
+    <div class="middlepane">
+       <h1>Usuń</h1>
+        <div class="color" style="black">
+            <div class="container-fluid" >
+                <div class="col-md-3">
+                    <div  class="col-md-3">
+                        <form class="example" method="post" action="">
+                            <label>
+                                ID Osoby:<input type="number" style="height:50px; width:150px" name="id_osoba_usun"/>
+                            </label>
+                            <label>
+                                <button type="submit" style="height:50px; width:150px">Submit</button>
+                            </label>
+                        </form>
+                    <div/>
+                <div/>
+            <div/>
+        <div/>
+    </div>
+<end/>
+<div class="container">
+    <div class="rightpane">
+      <h1>Zmień</h1>
+        <div class="color" style="black">
+            <div class="container-fluid" >
+                <div class="col-md-3">
+                    <div  class="col-md-3">
+                        <form  class="example" method="post" action="">
+                          <label>
+                            ID Osoby:<input type="number" style="height:50px; width:150px" name="id_osoba_zmien"/>
+                          </label>
+                          <label>
+                            Nazwisko:<input type="text" style="height:50px; width:150px" name="nazwisko_osoba_zmien"/>
+                          </label>
+                          <label>
+                            Imię: <input type="text" style="height:50px; width:150px"name="imie_osoba_zmien"/>
+                          </label>
+                          <label>
+                            Data urodzenia:<input type="text" style="height:50px; width:150px" name="dataur_osoba_zmien"/>
+                          </label>
+                          <label>
+                            Telefon:<input type="number" style="height:50px; width:150px" name="telefon_osoba_zmien"/>
+                          </label>
+                          <label>
+                            Email:<input type="text" style="height:50px; width:150px" name="email_osoba_zmien"/>
+                          </label>
+                          <label>
+                            Adres:<input type="text" style="height:50px; width:150px" name="adres_osoba_zmien"/>
+                          </label>
+                            <label>
+                                <button type="submit" style="height:50px; width:150px">Submit</button>
+                            </label>
+                        </form>
+                    <div/>
+                <div/>
+            <div/>
+        <div/>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
