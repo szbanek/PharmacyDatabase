@@ -1,4 +1,5 @@
 import mysql.connector
+from validate import *
 
 
 class Insert():
@@ -13,6 +14,10 @@ class Insert():
         godz_od,
         godz_do
     ):
+        if validateID(id): pass
+        if validateGodz(godz_do): pass
+        if validateGodz(godz_od): pass
+
         query = f"""INSERT INTO DYZUR
                 (
                     DZIEN,
@@ -29,7 +34,7 @@ class Insert():
                     {id_farmaceuta},
                     {id_apteki}
                 );"""
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def apteka(
         self,
@@ -39,6 +44,10 @@ class Insert():
         adres,
         telefon
     ):
+        if validateGodz(godz_do): pass
+        if validateGodz(godz_od): pass
+        if validateTelephone(telefon): pass
+
         query = f"""INSERT INTO APTEKA
                 (
                     NAZWA,
@@ -55,7 +64,7 @@ class Insert():
                     '{adres}',
                     {telefon}
                 );"""
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def lek(
         self,
@@ -72,13 +81,15 @@ class Insert():
                     '{nazwa}',
                     {recepta}
                 ); """
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def miasto(
         self,
         nazwa,
         kod
     ):
+        if validateKod(kod): pass
+
         query = f"""INSERT INTO MIASTO
                 (
                     NAZWA,
@@ -89,7 +100,7 @@ class Insert():
                     '{nazwa}',
                     '{kod}'
                 ); """
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def lekarstwa(
         self,
@@ -97,6 +108,9 @@ class Insert():
         id_lek,
         ilosc
     ):
+        if validateID(id_lek): pass
+        if validateID(id_zam): pass
+
         query = f"""INSERT INTO LEKARSTWA
                 (
                     ILOSC,
@@ -109,7 +123,7 @@ class Insert():
                     {id_zam},
                     {id_lek}
                 );"""
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def zamowienie(
         self,
@@ -117,19 +131,15 @@ class Insert():
         data_zam,
         id_klient
     ):
-        query = f"""INSERT INTO ZAMOWIENIE
-                (
-                    STATUS,
-                    DATA_ZAMOWIENIA,
-                    ID_KLIENT
-                )
-                VALUES
-                (
-                    '{status}',
-                    '{data_zam}',
-                    {id_klient}
-                );"""
-        self.__cursor.execute(query)
+        if validateID(id_klient): pass
+        if validateDate(data_zam): pass
+
+        query = f"""CALL Nowy_zakop (
+            {id_klient},
+            '{status}',
+            '{data_zam}'
+        );"""
+        self.execute(query)
 
     def magazyn(
         self,
@@ -138,6 +148,9 @@ class Insert():
         id_apteki,
         id_lek
     ):
+        if validateID(id_lek): pass
+        if validateID(id_apteki): pass
+
         query = f"""INSERT INTO MAGAZYN
                 (
                     POJEMNOSC,
@@ -152,13 +165,16 @@ class Insert():
                     {id_apteki},
                     {id_lek}
                 ); """
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def admin(
         self,
         id,
         placa
     ):
+        if validateID(id): pass
+        if validateID(placa): pass
+
         query = f"""INSERT INTO ADMINISTRATOR
                 (
                     ID,
@@ -169,13 +185,16 @@ class Insert():
                     {id},
                     {placa}
                 );"""
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def klient(
         self,
         id,
         zakup
     ):
+        if validateID(id): pass
+        if validateDate(zakup): pass
+
         query = f"""INSERT INTO KLIENT
                 (
                     ID,
@@ -186,7 +205,7 @@ class Insert():
                     {id},
                     '{zakup}'
                 );"""
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def farmaceuta(
         self,
@@ -194,6 +213,9 @@ class Insert():
         placa,
         wyksztalcenie
     ):
+        if validateID(id): pass
+        if validateID(placa): pass
+
         query = f"""INSERT INTO FARMACEUTA
                 (
                     ID,
@@ -206,7 +228,7 @@ class Insert():
                     {placa},
                     '{wyksztalcenie}'
                 ); """
-        self.__cursor.execute(query)
+        self.execute(query)
 
     def osoba(
         self,
@@ -217,6 +239,9 @@ class Insert():
         email,
         adres
     ):
+        if validateDate(data_ur): pass
+        if validateTelephone(telefon): pass
+
         query = f"""INSERT INTO OSOBA
                 (
                     NAZWISKO,
@@ -226,7 +251,7 @@ class Insert():
                     EMAIL,
                     ADRES
                 )
-                VALUS
+                VALUES
                 (
                     '{nazwisko}',
                     '{imie}',
@@ -235,4 +260,10 @@ class Insert():
                     '{email}',
                     '{adres}'
                 ); """
-        self.__cursor.execute(query)
+        self.execute(query)
+    
+    def execute(self, query):
+        try:
+            self.__cursor.execute(query)
+        except:
+            pass
