@@ -39,6 +39,10 @@ headings_administratorzy = ("ID", "PLACA")
 def index():
     return render_template('index.html')
 
+@app.route("/error")
+def error():
+    return render_template('strona_bledy.html', error_text = 'oops')
+
 @app.route("/watch_administrator")
 def watch_adm():
     return render_template('watch_database_administrator.html')
@@ -211,9 +215,17 @@ def modify_klient():
             mydb.commit()
 
             return render_template('index.html')
-        elif 'id_klient_dodaj' and 'poprzedni_zakup_klient_dodaj' in request.form:
+        elif 'id_klient_dodaj' and 'poprzedni_zakup_klient_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
             id = request.form['id_klient_dodaj']
             poprzedni_zakup = request.form['poprzedni_zakup_klient_dodaj']
+            nazwisko = request.form['nazwisko_osoba_dodaj']
+            imie = request.form['imie_osoba_dodaj']
+            data_ur = request.form['dataur_osoba_dodaj']
+            telefon = request.form['telefon_osoba_dodaj']
+            email = request.form['email_osoba_dodaj']
+            adres = request.form['adres_osoba_dodaj']
+
+            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
 
             insert.klient(id, poprzedni_zakup)
 
@@ -446,6 +458,92 @@ def modify_osoba():
             return render_template('modyfikacja_listy_osob.html')
     else:
        return render_template('modyfikacja_listy_osob.html')
+
+@app.route("/modify_administrator", methods=['GET', 'POST'])
+def modify_administrator():
+    if request.method == "POST":
+        if 'id_administrator_zmien' and 'placa_administrator_zmien' in request.form:
+            id = request.form['id_administrator_zmien']
+            placa = request.form['placa_administrator_zmien']
+
+
+            update.admin(id,placa)
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'id_administrator_dodaj' and 'placa_administrator_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
+            id = request.form['id_administrator_dodaj']
+            placa = request.form['placa_administrator_dodaj']
+            nazwisko = request.form['nazwisko_osoba_dodaj']
+            imie = request.form['imie_osoba_dodaj']
+            data_ur = request.form['dataur_osoba_dodaj']
+            telefon = request.form['telefon_osoba_dodaj']
+            email = request.form['email_osoba_dodaj']
+            adres = request.form['adres_osoba_dodaj']
+
+            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+
+            insert.admin(id, placa)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_administrator_usun' in request.form:
+            id = request.form['id_administrator_usun']
+
+            delete.admin(id)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_listy_administratorow.html')
+    else:
+       return render_template('modyfikacja_listy_administratorow.html')
+
+@app.route("/modify_farmaceuta", methods=['GET', 'POST'])
+def modify_farmaceuta():
+    if request.method == "POST":
+        if 'id_farmaceuta_zmien' and 'placa_farmaceuta_zmien' and 'wyksztalcenie_farmaceuta_zmien'in request.form:
+            id = request.form['id_farmaceuta_zmien']
+            placa = request.form['placa_farmaceuta_zmien']
+            wyksztalcenie = request.form['wyksztalcenie_farmaceuta_zmien']
+
+
+            update.farmaceuta(id,placa,wyksztalcenie)
+
+            mydb.commit()
+
+            return render_template('index.html')
+        elif 'id_farmaceuta_dodaj' and 'placa_farmaceuta_dodaj' and 'wyksztalcenie_farmaceuta_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
+            id = request.form['id_farmaceuta_dodaj']
+            placa = request.form['placa_farmaceuta_dodaj']
+            wyksztalcenie = request.form['wyksztalcenie_farmaceuta_dodaj']
+
+            nazwisko = request.form['nazwisko_osoba_dodaj']
+            imie = request.form['imie_osoba_dodaj']
+            data_ur = request.form['dataur_osoba_dodaj']
+            telefon = request.form['telefon_osoba_dodaj']
+            email = request.form['email_osoba_dodaj']
+            adres = request.form['adres_osoba_dodaj']
+
+            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+
+            insert.farmaceuta(id, placa,wyksztalcenie)
+
+            mydb.commit()
+            return render_template('index.html')
+        elif 'id_farmaceuta_usun' in request.form:
+            id = request.form['id_farmaceuta_usun']
+
+            delete.farmaceuta(id)
+
+            mydb.commit()
+            return render_template('index.html')
+        else:
+            return render_template('modyfikacja_listy_farmaceut.html')
+    else:
+       return render_template('modyfikacja_listy_farmaceut.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=8888)
