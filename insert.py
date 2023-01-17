@@ -1,5 +1,5 @@
 import mysql.connector
-from validate import *
+from utils import *
 
 
 class Insert():
@@ -14,9 +14,9 @@ class Insert():
         godz_od,
         godz_do
     ):
-        if validateID(id): pass
-        if validateGodz(godz_do): pass
-        if validateGodz(godz_od): pass
+        if validateID(id): return "złe id"
+        if validateGodz(godz_do): return "zła godz do"
+        if validateGodz(godz_od): return "zła godz od"
 
         query = f"""INSERT INTO DYZUR
                 (
@@ -34,7 +34,7 @@ class Insert():
                     {id_farmaceuta},
                     {id_apteki}
                 );"""
-        self.execute(query)
+        return self.execute(query)
 
     def apteka(
         self,
@@ -44,9 +44,9 @@ class Insert():
         adres,
         telefon
     ):
-        if validateGodz(godz_do): pass
-        if validateGodz(godz_od): pass
-        if validateTelephone(telefon): pass
+        if validateGodz(godz_do): return "zła godz do"
+        if validateGodz(godz_od): return "zła godz od"
+        if validateTelephone(telefon): return "zły telefon"
 
         query = f"""INSERT INTO APTEKA
                 (
@@ -64,7 +64,7 @@ class Insert():
                     '{adres}',
                     {telefon}
                 );"""
-        self.execute(query)
+        return self.execute(query)
 
     def lek(
         self,
@@ -81,14 +81,14 @@ class Insert():
                     '{nazwa}',
                     {recepta}
                 ); """
-        self.execute(query)
+        return self.execute(query)
 
     def miasto(
         self,
         nazwa,
         kod
     ):
-        if validateKod(kod): pass
+        if validateKod(kod): return "zły kod"
 
         query = f"""INSERT INTO MIASTO
                 (
@@ -100,7 +100,7 @@ class Insert():
                     '{nazwa}',
                     '{kod}'
                 ); """
-        self.execute(query)
+        return self.execute(query)
 
     def lekarstwa(
         self,
@@ -108,8 +108,8 @@ class Insert():
         id_lek,
         ilosc
     ):
-        if validateID(id_lek): pass
-        if validateID(id_zam): pass
+        if validateID(id_lek): return "złe id leku"
+        if validateID(id_zam): return "złe id zamówienia"
 
         query = f"""INSERT INTO LEKARSTWA
                 (
@@ -123,7 +123,7 @@ class Insert():
                     {id_zam},
                     {id_lek}
                 );"""
-        self.execute(query)
+        return self.execute(query)
 
     def zamowienie(
         self,
@@ -131,15 +131,15 @@ class Insert():
         data_zam,
         id_klient
     ):
-        if validateID(id_klient): pass
-        if validateDate(data_zam): pass
+        if validateID(id_klient): return "złe id klienta"
+        if validateDate(data_zam): return "zła data zamówienia (format dd.mm.rrrr)"
 
         query = f"""CALL Nowy_zakop (
             {id_klient},
             '{status}',
             '{data_zam}'
         );"""
-        self.execute(query)
+        return self.execute(query)
 
     def magazyn(
         self,
@@ -148,8 +148,8 @@ class Insert():
         id_apteki,
         id_lek
     ):
-        if validateID(id_lek): pass
-        if validateID(id_apteki): pass
+        if validateID(id_lek): return "złe id leku" 
+        if validateID(id_apteki): return "złe id apteki"
 
         query = f"""INSERT INTO MAGAZYN
                 (
@@ -165,15 +165,15 @@ class Insert():
                     {id_apteki},
                     {id_lek}
                 ); """
-        self.execute(query)
+        return self.execute(query)
 
     def admin(
         self,
         id,
         placa
     ):
-        if validateID(id): pass
-        if validateID(placa): pass
+        if validateID(id): return "złe id"
+        if validateSalary(placa): return "zła płaca"
 
         query = f"""INSERT INTO ADMINISTRATOR
                 (
@@ -185,15 +185,15 @@ class Insert():
                     {id},
                     {placa}
                 );"""
-        self.execute(query)
+        return self.execute(query)
 
     def klient(
         self,
         id,
         zakup
     ):
-        if validateID(id): pass
-        if validateDate(zakup): pass
+        if validateID(id): return "złe id"
+        if validateDate(zakup): return "zła data zakupu (format dd.mm.rrrr)"
 
         query = f"""INSERT INTO KLIENT
                 (
@@ -205,7 +205,7 @@ class Insert():
                     {id},
                     '{zakup}'
                 );"""
-        self.execute(query)
+        return self.execute(query)
 
     def farmaceuta(
         self,
@@ -213,8 +213,8 @@ class Insert():
         placa,
         wyksztalcenie
     ):
-        if validateID(id): pass
-        if validateID(placa): pass
+        if validateID(id): return "złe id"
+        if validateSalary(placa): return "zła płaca"
 
         query = f"""INSERT INTO FARMACEUTA
                 (
@@ -228,7 +228,7 @@ class Insert():
                     {placa},
                     '{wyksztalcenie}'
                 ); """
-        self.execute(query)
+        return self.execute(query)
 
     def osoba(
         self,
@@ -239,8 +239,8 @@ class Insert():
         email,
         adres
     ):
-        if validateDate(data_ur): pass
-        if validateTelephone(telefon): pass
+        if validateDate(data_ur): return "zła data (format dd.mm.rrrr)"
+        if validateTelephone(telefon): return "zły telefon"
 
         query = f"""INSERT INTO OSOBA
                 (
@@ -260,10 +260,11 @@ class Insert():
                     '{email}',
                     '{adres}'
                 ); """
-        self.execute(query)
+        return self.execute(query)
     
     def execute(self, query):
         try:
             self.__cursor.execute(query)
         except:
-            pass
+            return "unexpected error"
+            

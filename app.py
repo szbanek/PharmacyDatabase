@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 # from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 # from sqlalchemy.orm import relationship
@@ -6,7 +6,9 @@ import mysql.connector
 from update import Update
 from insert import Insert
 from delete import Delete
+from utils import getSalarySum
 
+error_message = ""
 app = Flask(__name__)
 
 bootstrap = Bootstrap(app)
@@ -41,7 +43,7 @@ def index():
 
 @app.route("/error")
 def error():
-    return render_template('strona_bledy.html', error_text = 'oops')
+    return render_template('strona_bledy.html', error_text = error_message)
 
 @app.route("/watch_administrator")
 def watch_adm():
@@ -55,12 +57,17 @@ def watch_farmaceuta():
 @app.route("/modify_lek", methods=['GET', 'POST'])
 def modify_lek():
     if request.method == "POST":
+        global error_message
         if 'id_lek_zmien' and 'nazwa_lek_zmien' and 'recepta_lek_zmien' in request.form:
             id = request.form['id_lek_zmien']
             nazwa = request.form['nazwa_lek_zmien']
             recepta = request.form['recepta_lek_zmien']
 
-            update.lek(id,nazwa,recepta)
+            tmp = update.lek(id,nazwa,recepta)
+            if tmp != None:
+                
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -69,14 +76,20 @@ def modify_lek():
             nazwa = request.form['nazwa_lek_dodaj']
             recepta = request.form['recepta_lek_dodaj']
 
-            insert.lek(nazwa, recepta)
+            tmp = insert.lek(nazwa, recepta)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
         elif 'id_lek_usun' and 'nazwa_lek_usun' and 'recepta_lek_usun' in request.form:
             id = request.form['id_lek_usun']
 
-            delete.lek(id)
+            tmp = delete.lek(id)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -88,6 +101,7 @@ def modify_lek():
 @app.route("/modify_apteka", methods=['GET', 'POST'])
 def modify_apteka():
     if request.method == "POST":
+        global error_message
         if 'id_apteka_zmien' and 'nazwa_apteka_zmien' and 'godz_od_apteka_zmien' and 'godz_do_apteka_zmien' and 'adres_apteka_zmien' and 'telefon_apteka_zmien' in request.form:
             id = request.form['id_apteka_zmien']
             nazwa = request.form['nazwa_apteka_zmien']
@@ -95,7 +109,10 @@ def modify_apteka():
             godz_do = request.form['godz_do_apteka_zmien']
             adres = request.form['adres_apteka_zmien']
             telefon = request.form['telefon_apteka_zmien']
-            update.apteka(id,nazwa,godz_od,godz_do,adres,telefon)
+            tmp = update.apteka(id,nazwa,godz_od,godz_do,adres,telefon)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -107,14 +124,20 @@ def modify_apteka():
             adres = request.form['adres_apteka_dodaj']
             telefon = request.form['telefon_apteka_dodaj']
 
-            insert.apteka(nazwa,godz_od,godz_do,adres,telefon)
+            tmp = insert.apteka(nazwa,godz_od,godz_do,adres,telefon)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
         elif 'id_apteka_usun' in request.form:
             id = request.form['id_apteka_usun']
 
-            delete.apteka(id)
+            tmp = delete.apteka(id)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -139,6 +162,7 @@ def show_table_apteka_to_adm():
 @app.route("/modify_dyzury", methods=['GET', 'POST'])
 def modify_dyzury():
     if request.method == "POST":
+        global error_message
         if 'dzien_dyzur_zmien' and 'godz_od_dyzur_zmien' and 'godz_do_dyzur_zmien' and 'id_farmaceuta_dyzur_zmien' and 'id_apteka_dyzur_zmien' in request.form:
             dzien = request.form['dzien_dyzur_zmien']
             godz_od = request.form['godz_od_dyzur_zmien']
@@ -146,7 +170,10 @@ def modify_dyzury():
             id_farmaceuta = request.form['id_farmaceuta_dyzur_zmien']
             id_apteka = request.form['id_apteka_dyzur_zmien']
 
-            update.dyzur(id_farmaceuta,id_apteka,dzien,godz_od, godz_do)
+            tmp = update.dyzur(id_farmaceuta,id_apteka,dzien,godz_od, godz_do)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -158,7 +185,10 @@ def modify_dyzury():
             id_farmaceuta = request.form['id_farmaceuta_dyzur_dodaj']
             id_apteka = request.form['id_apteka_dyzur_dodaj']
 
-            insert.dyzur(id_farmaceuta,id_apteka,dzien,godz_od, godz_do)
+            tmp = insert.dyzur(id_farmaceuta,id_apteka,dzien,godz_od, godz_do)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -167,7 +197,10 @@ def modify_dyzury():
             id_farmaceuta = request.form['id_farmaceuta_dyzur_usun']
             id_apteka = request.form['id_apteka_dyzur_usun']
 
-            delete.dyzur(id_farmaceuta, id_apteka, dzien)
+            tmp = delete.dyzur(id_farmaceuta, id_apteka, dzien)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -195,28 +228,31 @@ def show_table_farmaceuta_to_adm():
         id = [request.form['Farmaceuta']]
         mycursor.execute("SELECT * FROM FARMACEUTA WHERE ID = %s", id)
         data_farmaceuci = mycursor.fetchall()
-        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci)
+        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci, variable_suma=getSalarySum(mycursor, False))
     else:
         mycursor.execute("select * from FARMACEUTA")
         data_farmaceuci = mycursor.fetchall()
-        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci)
+        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci, variable_suma=getSalarySum(mycursor, False))
 
 
 @app.route("/modify_klient", methods=['GET', 'POST'])
 def modify_klient():
     if request.method == "POST":
+        global error_message
         if 'id_klient_zmien' and 'poprzedni_zakup_klient_zmien' in request.form:
             id = request.form['id_klient_zmien']
             poprzedni_zakup = request.form['poprzedni_zakup_klient_zmien']
 
 
-            update.klient(id,poprzedni_zakup)
+            tmp = update.klient(id,poprzedni_zakup)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
             return render_template('index.html')
         elif 'id_klient_dodaj' and 'poprzedni_zakup_klient_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
-            id = request.form['id_klient_dodaj']
             poprzedni_zakup = request.form['poprzedni_zakup_klient_dodaj']
             nazwisko = request.form['nazwisko_osoba_dodaj']
             imie = request.form['imie_osoba_dodaj']
@@ -225,16 +261,26 @@ def modify_klient():
             email = request.form['email_osoba_dodaj']
             adres = request.form['adres_osoba_dodaj']
 
-            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            tmp = insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
-            insert.klient(id, poprzedni_zakup)
+            mycursor.execute(f"SELECT id from osoba WHERE nazwisko='{nazwisko}' and imie='{imie}' and telefon={telefon};")
+            tmp = insert.klient(mycursor.fetchone()[0], poprzedni_zakup)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
         elif 'id_klient_usun' and 'poprzedni_zakup_klient_usun' in request.form:
             id = request.form['id_klient_usun']
 
-            delete.klient(id)
+            tmp = delete.klient(id)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -272,13 +318,17 @@ def show_table_klient_to_fmc():
 @app.route("/modify_zamowienia", methods=['GET', 'POST'])
 def modify_zamowienia():
     if request.method == "POST":
+        global error_message
         if 'id_zamowienia_zmien' and 'status_zamowienia_zmien' and 'data_zamowienia_zmien' and 'id_klienta_zamowienia_zmien' in request.form:
             id = request.form['id_zamowienia_zmien']
             status = request.form['status_zamowienia_zmien']
             data_zam = request.form['data_zamowienia_zmien']
             id_klienta = request.form['id_klienta_zamowienia_zmien']
 
-            update.zamowienie(id,status,data_zam, id_klienta)
+            tmp = update.zamowienie(id,status,data_zam, id_klienta)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -289,14 +339,20 @@ def modify_zamowienia():
             data_zam = request.form['data_zamowienia_dodaj']
             id_klienta = request.form['id_klienta_zamowienia_dodaj']
 
-            insert.zamowienie(status,data_zam, id_klienta)
+            tmp = insert.zamowienie(status,data_zam, id_klienta)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
         elif 'id_zamowienia_usun' in request.form:
             id = request.form['id_zamowienia_usun']
 
-            delete.zamowienie(id)
+            tmp = delete.zamowienie(id)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -359,13 +415,17 @@ def show_table_lek_to_fmc():
 @app.route("/modify_magazyn", methods=['GET', 'POST'])
 def modify_magazyn():
     if request.method == "POST":
+        global error_message
         if 'pojemnosc_magazyn_zmien' and 'adres_magazyn_zmien' and 'id_apteka_magazyn_zmien' and 'id_lekarstwo_magazyn_zmien' in request.form:
             pojemnosc = request.form['pojemnosc_magazyn_zmien']
             adres = request.form['adres_magazyn_zmien']
             id_apteka = request.form['id_apteka_magazyn_zmien']
             id_lekarstwo = request.form['id_lekarstwo_magazyn_zmien']
 
-            update.magazyn(pojemnosc,adres, id_apteka, id_lekarstwo )
+            tmp = update.magazyn(pojemnosc,adres, id_apteka, id_lekarstwo )
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -376,7 +436,10 @@ def modify_magazyn():
             id_apteka = request.form['id_apteka_magazyn_dodaj']
             id_lekarstwo = request.form['id_lekarstwo_magazyn_dodaj']
 
-            insert.magazyn(pojemnosc, adres, id_apteka, id_lekarstwo)
+            tmp = insert.magazyn(pojemnosc, adres, id_apteka, id_lekarstwo)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -384,7 +447,10 @@ def modify_magazyn():
             id_apteka = request.form['id_apteka_magazyn_usun']
             id_lekarstwo = request.form['id_lekarstwo_magazyn_usun']
 
-            delete.magazyn(id_apteka, id_lekarstwo)
+            tmp = delete.magazyn(id_apteka, id_lekarstwo)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -412,15 +478,16 @@ def show_table_administrator_to_adm():
         id = [request.form['Administrator']]
         mycursor.execute("SELECT ID,PLACA FROM ADMINISTRATOR WHERE ID = %s", id)
         data_administratorzy = mycursor.fetchall()
-        return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy)
+        return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy, variable_suma=getSalarySum(mycursor, True))
     else:
         mycursor.execute("select * from ADMINISTRATOR")
         data_administratorzy = mycursor.fetchall()
-        return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy)
+        return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy, variable_suma=getSalarySum(mycursor, True))
 
 @app.route("/modify_osoba", methods=['GET', 'POST'])
 def modify_osoba():
     if request.method == "POST":
+        global error_message
         if 'id_osoba_zmien' and 'nazwisko_osoba_zmien' and 'imie_osoba_zmien' and 'dataur_osoba_zmien' and 'telefon_osoba_zmien' and 'email_osoba_zmien' and 'adres_osoba_zmien' in request.form:
             id = request.form['id_osoba_zmien']
             nazwisko = request.form['nazwisko_osoba_zmien']
@@ -430,7 +497,10 @@ def modify_osoba():
             email = request.form['email_osoba_zmien']
             adres = request.form['adres_osoba_zmien']
 
-            update.osoba(id,nazwisko,imie, data_ur, telefon, email, adres)
+            tmp = update.osoba(id,nazwisko,imie, data_ur, telefon, email, adres)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -443,14 +513,20 @@ def modify_osoba():
             email = request.form['email_osoba_dodaj']
             adres = request.form['adres_osoba_dodaj']
 
-            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            tmp = insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
         elif 'id_osoba_usun' in request.form:
             id = request.form['id_osoba_usun']
 
-            delete.osoba(id)
+            tmp = delete.osoba(id)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -462,12 +538,16 @@ def modify_osoba():
 @app.route("/modify_administrator", methods=['GET', 'POST'])
 def modify_administrator():
     if request.method == "POST":
+        global error_message
         if 'id_administrator_zmien' and 'placa_administrator_zmien' in request.form:
             id = request.form['id_administrator_zmien']
             placa = request.form['placa_administrator_zmien']
 
 
-            update.admin(id,placa)
+            tmp = update.admin(id,placa)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -482,16 +562,26 @@ def modify_administrator():
             email = request.form['email_osoba_dodaj']
             adres = request.form['adres_osoba_dodaj']
 
-            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            tmp = insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
-            insert.admin(id, placa)
+            mycursor.execute(f"SELECT id from osoba WHERE nazwisko='{nazwisko}' and imie='{imie}' and telefon={telefon};")
+            tmp = insert.admin(mycursor.fetchone()[0], placa)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
         elif 'id_administrator_usun' in request.form:
             id = request.form['id_administrator_usun']
 
-            delete.admin(id)
+            tmp = delete.admin(id)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
@@ -503,13 +593,17 @@ def modify_administrator():
 @app.route("/modify_farmaceuta", methods=['GET', 'POST'])
 def modify_farmaceuta():
     if request.method == "POST":
+        global error_message
         if 'id_farmaceuta_zmien' and 'placa_farmaceuta_zmien' and 'wyksztalcenie_farmaceuta_zmien'in request.form:
             id = request.form['id_farmaceuta_zmien']
             placa = request.form['placa_farmaceuta_zmien']
             wyksztalcenie = request.form['wyksztalcenie_farmaceuta_zmien']
 
 
-            update.farmaceuta(id,placa,wyksztalcenie)
+            tmp = update.farmaceuta(id,placa,wyksztalcenie)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
 
@@ -526,16 +620,26 @@ def modify_farmaceuta():
             email = request.form['email_osoba_dodaj']
             adres = request.form['adres_osoba_dodaj']
 
-            insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            tmp = insert.osoba(nazwisko, imie, data_ur, telefon, email, adres)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
-            insert.farmaceuta(id, placa,wyksztalcenie)
+            mycursor.execute(f"SELECT id from osoba WHERE nazwisko='{nazwisko}' and imie='{imie}' and telefon={telefon};")
+            tmp = insert.farmaceuta(mycursor.fetchone()[0], placa, wyksztalcenie)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')
         elif 'id_farmaceuta_usun' in request.form:
             id = request.form['id_farmaceuta_usun']
 
-            delete.farmaceuta(id)
+            tmp = delete.farmaceuta(id)
+            if tmp != None:
+                error_message = tmp
+                return redirect(url_for("error"))
 
             mydb.commit()
             return render_template('index.html')

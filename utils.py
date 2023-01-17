@@ -5,6 +5,14 @@ def validateID(id):
         return False
     except:
         return True
+
+def validateSalary(salary):
+    try:
+        if int(salary)<0:
+            return True
+        return False
+    except:
+        return True
     
 
 def validateTelephone(telefon):
@@ -42,3 +50,8 @@ def validateKod(kod):
         return False
     except:
         return True
+
+def getSalarySum(cursor, isAdmin):
+    query = f"""SELECT Suma_plac ({isAdmin})"""
+    cursor.execute(query)
+    return cursor.fetchone()[0]

@@ -1,5 +1,5 @@
 import mysql.connector
-from validate import *
+from utils import *
 
 class Update():
     def __init__(self, cursor):
@@ -13,10 +13,10 @@ class Update():
         godz_od,
         godz_do
     ):
-        if validateID(id_apteki): pass
-        if validateID(id_farmaceuta): pass
-        if validateGodz(godz_do): pass
-        if validateGodz(godz_od): pass
+        if validateID(id_apteki): return "złe id apteki"
+        if validateID(id_farmaceuta): return "złe id farmaceuty"
+        if validateGodz(godz_do): return "zła godz do"
+        if validateGodz(godz_od): return "zła godz od"
 
         query = f"""UPDATE DYZUR
                 SET godz_od = {godz_od},
@@ -24,7 +24,7 @@ class Update():
                 WHERE DZIEN = '{dzien}' and
                 ID_FARMACEUTA = {id_farmaceuta} and
                 ID_APTEKA = {id_apteki};"""
-        self.execute(query)
+        return self.execute(query)
 
     def apteka(
         self,
@@ -35,10 +35,10 @@ class Update():
         adres,
         telefon
     ):
-        if validateID(id): pass
-        if validateGodz(godz_do): pass
-        if validateGodz(godz_od): pass
-        if validateTelephone(telefon): pass
+        if validateID(id): return "złe id"
+        if validateGodz(godz_do): return "zła godz do"
+        if validateGodz(godz_od): return "zła godz od"
+        if validateTelephone(telefon): return "zły telefon"
 
         query = f"""UPDATE APTEKA
                 SET nazwa = '{nazwa}',
@@ -47,7 +47,7 @@ class Update():
                     adres = '{adres}',
                     telefon = {telefon}
                 WHERE id = {id};"""
-        self.execute(query)
+        return self.execute(query)
 
     def lek(
         self,
@@ -55,13 +55,13 @@ class Update():
         nazwa,
         recepta
     ):
-        if validateID(id): pass
+        if validateID(id): return "złe id"
 
         query = f"""UPDATE LEK
                     SET NAZWA = '{nazwa}',
                     RECEPTA = {recepta}
                     WHERE ID ={id}"""
-        self.execute(query)
+        return self.execute(query)
 
     def miasto(
         self,
@@ -69,14 +69,14 @@ class Update():
         nazwa,
         kod
     ):
-        if validateID(id): pass
-        if validateKod(kod): pass
+        if validateID(id): return "złe id"
+        if validateKod(kod): return "zły kod"
 
         query = f"""UPDATE MIASTO
                 SET nazwa = '{nazwa}',
                     kod = '{kod}'
                 WHERE id = {id}; """
-        self.execute(query)
+        return self.execute(query)
 
     def lekarstwa(
         self,
@@ -84,14 +84,14 @@ class Update():
         id_lek,
         ilosc
     ):
-        if validateID(id_zam): pass
-        if validateID(id_lek): pass
+        if validateID(id_zam): return "złe id zamówienia"
+        if validateID(id_lek): return "złe id leku"
         
         query = f"""UPDATE LEKARSTWA
                 SET ilosc = {ilosc},
                 WHERE ID_ZAMOWIENIE = {id_zam} and
                     ID_LEKARSTWO = {id_lek}; """
-        self.execute(query)
+        return self.execute(query)
 
     def zamowienie(
         self,
@@ -100,16 +100,16 @@ class Update():
         data_zam,
         id_klient
     ):
-        if validateID(id): pass
-        if validateID(id_klient): pass
-        if validateDate(data_zam): pass
+        if validateID(id): return "złe id"
+        if validateID(id_klient): return "złe id klienta"
+        if validateDate(data_zam): return "zła data (format dd.mm.rrrr)"
         
         query = f"""UPDATE ZAMOWIENIE
                 SET status '{status}',
                     DATA_ZAMOWIENIA = '{data_zam}',
                     ID_KLIENT = {id_klient}
                 WHERE id = {id} """
-        self.execute(query)
+        return self.execute(query)
 
     def magazyn(
         self,
@@ -118,41 +118,41 @@ class Update():
         id_apteki,
         id_lek
     ):
-        if validateID(id_lek): pass
-        if validateID(id_apteki): pass
+        if validateID(id_lek): return "złe id leku"
+        if validateID(id_apteki): return "złe id apteki"
 
         query = f"""UPDATE MAGAZYN
                 SET POJEMNOSC = {pojemnosc},
                     ADRES = '{adres}',
                 WHERE ID_APTEKA = {id_apteki} and
                     ID_LEKARSTWO = {id_lek}; """
-        self.execute(query)
+        return self.execute(query)
 
     def admin(
         self,
         id,
         placa
     ):
-        if validateID(id): pass
-        if validateID(placa): pass
+        if validateID(id): return "złe id"
+        if validateSalary(placa): return "zła płaca"
 
         query = f"""UPDATE ADMINISTRATOR
                 SET placa = {placa}
                 WHERE id = {id}; """
-        self.execute(query)
+        return self.execute(query)
 
     def klient(
         self,
         id,
         zakup
     ):
-        if validateID(id): pass
-        if validateDate(zakup): pass
+        if validateID(id): return "złe id"
+        if validateDate(zakup): return "zła data (format dd.mm.rrrr)"
 
         query = f"""UPDATE KLIENT
                 SET POPRZEDNI_ZAKUP = '{zakup}'
                 WHERE id = {id}; """
-        self.execute(query)
+        return self.execute(query)
 
     def farmaceuta(
         self,
@@ -160,14 +160,14 @@ class Update():
         placa,
         wyksztalcenie
     ):
-        if validateID(id): pass
-        if validateID(placa): pass
+        if validateID(id): return "złe id"
+        if validateSalary(placa): return "zła płaca"
 
         query = f"""UPDATE FARMACEUTA
                 SET PLACA = {placa},
                     WYKSZTALCENIE = '{wyksztalcenie}'
                 WHERE id = {id}; """
-        self.execute(query)
+        return self.execute(query)
 
     def osoba(
         self,
@@ -179,9 +179,9 @@ class Update():
         email,
         adres
     ):
-        if validateID(id): pass
-        if validateDate(data_ur): pass
-        if validateTelephone(telefon): pass
+        if validateID(id): return "złe id"
+        if validateDate(data_ur): return "zła data (format dd.mm.rrrr)"
+        if validateTelephone(telefon): return "zły telefon"
 
         query = f"""UPDATE OSOBA
                 SET NAZWISKO = '{nazwisko}',
@@ -191,10 +191,10 @@ class Update():
                     EMAIL = '{email}',
                     ADRES = '{adres}'
                 WHERE id = {id}; """
-        self.execute(query)
+        return self.execute(query)
 
     def execute(self, query):
             try:
-                self.__cursor.self.execute(query)
+                self.__cursor.execute(query)
             except:
-                pass
+                return "unexpected error"
