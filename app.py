@@ -274,7 +274,7 @@ def modify_klient():
 
             mydb.commit()
             return render_template('index.html')
-        elif 'id_klient_usun' and 'poprzedni_zakup_klient_usun' in request.form:
+        elif 'id_klient_usun' in request.form:
             id = request.form['id_klient_usun']
 
             tmp = delete.klient(id)
@@ -552,8 +552,7 @@ def modify_administrator():
             mydb.commit()
 
             return render_template('index.html')
-        elif 'id_administrator_dodaj' and 'placa_administrator_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
-            id = request.form['id_administrator_dodaj']
+        elif 'placa_administrator_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
             placa = request.form['placa_administrator_dodaj']
             nazwisko = request.form['nazwisko_osoba_dodaj']
             imie = request.form['imie_osoba_dodaj']
@@ -608,8 +607,7 @@ def modify_farmaceuta():
             mydb.commit()
 
             return render_template('index.html')
-        elif 'id_farmaceuta_dodaj' and 'placa_farmaceuta_dodaj' and 'wyksztalcenie_farmaceuta_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
-            id = request.form['id_farmaceuta_dodaj']
+        elif 'placa_farmaceuta_dodaj' and 'wyksztalcenie_farmaceuta_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
             placa = request.form['placa_farmaceuta_dodaj']
             wyksztalcenie = request.form['wyksztalcenie_farmaceuta_dodaj']
 
