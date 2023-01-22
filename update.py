@@ -196,5 +196,7 @@ class Update():
     def execute(self, query):
             try:
                 self.__cursor.execute(query)
+            except mysql.connector.Error as err:
+                return err.msg
             except:
                 return "unexpected error"

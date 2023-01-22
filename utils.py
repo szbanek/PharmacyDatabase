@@ -35,7 +35,7 @@ def validateDate(date):
 def validateGodz(godz):
     try:
         godz = int(godz)
-        if godz>=0 and godz <= 24:
+        if godz<0 or godz > 24:
             return True
         return False
     except:
