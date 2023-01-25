@@ -72,7 +72,7 @@ def modify_lek():
             mydb.commit()
 
             return render_template('index.html')
-        elif 'id_lek_dodaj' and 'nazwa_lek_dodaj' and 'recepta_lek_dodaj' in request.form:
+        elif 'nazwa_lek_dodaj' and 'recepta_lek_dodaj' in request.form:
             nazwa = request.form['nazwa_lek_dodaj']
             recepta = request.form['recepta_lek_dodaj']
 
@@ -252,7 +252,7 @@ def modify_klient():
             mydb.commit()
 
             return render_template('index.html')
-        elif 'id_klient_dodaj' and 'poprzedni_zakup_klient_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
+        elif 'poprzedni_zakup_klient_dodaj' and 'nazwisko_osoba_dodaj' and 'imie_osoba_dodaj' and 'dataur_osoba_dodaj' and 'telefon_osoba_dodaj' and 'email_osoba_dodaj' and 'adres_osoba_dodaj' in request.form:
             poprzedni_zakup = request.form['poprzedni_zakup_klient_dodaj']
             nazwisko = request.form['nazwisko_osoba_dodaj']
             imie = request.form['imie_osoba_dodaj']
