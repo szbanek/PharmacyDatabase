@@ -27,14 +27,15 @@ delete = Delete(mycursor)
 #for data in records:
     #print(data)
 
+headings_osoby = ( "ID", "NAZWISKO", "IMIE", "DATA_URODZENIA", "TELEFON", "EMAIL", "ADRES")
 headings_apteka = ("ID", "NAZWA", "GODZ_OD", "GODZ_DO", "ADRES", "TELEFON")
 headings_dyzury = ("DZIEN", "GODZ_OD", "GODZ_DO", "ID_FARMACEUTA", "ID_APTEKA")
-headings_farmaceuci = ("ID", "PLACA", "WYKSZTALCENIE")
-headings_klienci = ("ID", "POPRZEDNI_ZAKUP")
-headings_zamowienia = ("ID", "STATUS", "DATA_ZAMOWIENIA")
+headings_farmaceuci = ("PLACA", "WYKSZTALCENIE")
+headings_klienci = ("POPRZEDNI_ZAKUP",)
+headings_zamowienia = ("ID", "STATUS", "DATA_ZAMOWIENIA", "ID_KLIENTA")
 headings_lek = ("ID", "NAZWA", "RECEPTA")
 headings_magazyny = ("POJEMNOSC", "ADRES", "ID_APTEKA", "ID_LEKARSTWO")
-headings_administratorzy = ("ID", "PLACA")
+headings_administratorzy = ("PLACA",)
 
 @app.route("/home")
 @app.route("/")
@@ -83,7 +84,7 @@ def modify_lek():
 
             mydb.commit()
             return render_template('index.html')
-        elif 'id_lek_usun' and 'nazwa_lek_usun' and 'recepta_lek_usun' in request.form:
+        elif 'id_lek_usun' in request.form:
             id = request.form['id_lek_usun']
 
             tmp = delete.lek(id)
@@ -226,13 +227,15 @@ def show_table_dyzury_to_adm():
 def show_table_farmaceuta_to_adm():
     if request.method == "POST":
         id = [request.form['Farmaceuta']]
-        mycursor.execute("SELECT * FROM FARMACEUTA WHERE ID = %s", id)
+        mycursor.execute("""SELECT osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, PLACA, WYKSZTALCENIE
+        FROM OSOBA INNER JOIN FARMACEUTA ON farmaceuta.id = osoba.id WHERE osoba.ID = %s""", id)
         data_farmaceuci = mycursor.fetchall()
-        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci, variable_suma=getSalarySum(mycursor, False))
+        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_osoby+headings_farmaceuci, data=data_farmaceuci, variable_suma=getSalarySum(mycursor, False))
     else:
-        mycursor.execute("select * from FARMACEUTA")
+        mycursor.execute("""select osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, PLACA, WYKSZTALCENIE
+        from OSOBA INNER JOIN FARMACEUTA ON farmaceuta.id = osoba.id""")
         data_farmaceuci = mycursor.fetchall()
-        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_farmaceuci, data=data_farmaceuci, variable_suma=getSalarySum(mycursor, False))
+        return render_template('watch_database_administrator_farmaceuci.html', headings=headings_osoby+headings_farmaceuci, data=data_farmaceuci, variable_suma=getSalarySum(mycursor, False))
 
 
 @app.route("/modify_klient", methods=['GET', 'POST'])
@@ -294,25 +297,29 @@ def modify_klient():
 def show_table_klient_to_adm():
     if request.method == "POST":
         id = [request.form['Klient']]
-        mycursor.execute("SELECT * FROM KLIENT WHERE ID = %s", id)
+        mycursor.execute("""SELECT osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, POPRZEDNI_ZAKUP
+        FROM OSOBA INNER JOIN KLIENT ON klient.id = osoba.id  WHERE osoba.ID = %s""", id)
         data_klienci = mycursor.fetchall()
-        return render_template('watch_database_administrator_klienci.html', headings=headings_klienci, data=data_klienci)
+        return render_template('watch_database_administrator_klienci.html', headings=headings_osoby+headings_klienci, data=data_klienci)
     else:
-        mycursor.execute("select * from KLIENT")
+        mycursor.execute("""select osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, POPRZEDNI_ZAKUP
+        from OSOBA INNER JOIN KLIENT ON klient.id = osoba.id """)
         data_klienci = mycursor.fetchall()
-        return render_template('watch_database_administrator_klienci.html', headings=headings_klienci, data=data_klienci)
+        return render_template('watch_database_administrator_klienci.html', headings=headings_osoby+headings_klienci, data=data_klienci)
 
 @app.route("/klienci_farmaceuta", methods=['GET', 'POST'])
 def show_table_klient_to_fmc():
     if request.method == "POST":
         id = [request.form['Klient_farmaceuta']]
-        mycursor.execute("SELECT * FROM KLIENT WHERE ID = %s", id)
+        mycursor.execute("""SELECT osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, POPRZEDNI_ZAKUP
+        FROM OSOBA INNER JOIN KLIENT ON klient.id = osoba.id  WHERE osoba.ID = %s""", id)
         data_klienci = mycursor.fetchall()
-        return render_template('watch_database_farmaceuta_klienci.html', headings=headings_klienci, data=data_klienci)
+        return render_template('watch_database_farmaceuta_klienci.html', headings=headings_osoby+headings_klienci, data=data_klienci)
     else:
-        mycursor.execute("select * from KLIENT")
+        mycursor.execute("""select osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, POPRZEDNI_ZAKUP
+        from OSOBA INNER JOIN KLIENT ON klient.id = osoba.id """)
         data_klienci = mycursor.fetchall()
-        return render_template('watch_database_farmaceuta_klienci.html', headings=headings_klienci, data=data_klienci)
+        return render_template('watch_database_farmaceuta_klienci.html', headings=headings_osoby+headings_klienci, data=data_klienci)
 
 
 @app.route("/modify_zamowienia", methods=['GET', 'POST'])
@@ -476,13 +483,13 @@ def show_table_magazyn_to_adm():
 def show_table_administrator_to_adm():
     if request.method == "POST":
         id = [request.form['Administrator']]
-        mycursor.execute("SELECT ID,PLACA FROM ADMINISTRATOR WHERE ID = %s", id)
+        mycursor.execute("SELECT osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, PLACA FROM OSOBA INNER JOIN ADMINISTRATOR ON administrator.id = osoba.id WHERE osoba.ID = %s", id)
         data_administratorzy = mycursor.fetchall()
-        return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy, variable_suma=getSalarySum(mycursor, True))
+        return render_template('watch_database_administrator_administratorzy.html', headings=headings_osoby+headings_administratorzy, data=data_administratorzy, variable_suma=getSalarySum(mycursor, True))
     else:
-        mycursor.execute("select * from ADMINISTRATOR")
+        mycursor.execute("SELECT osoba.ID, NAZWISKO, IMIE, DATA_URODZENIA, TELEFON, EMAIL, ADRES, PLACA FROM OSOBA INNER JOIN ADMINISTRATOR ON administrator.id = osoba.id")
         data_administratorzy = mycursor.fetchall()
-        return render_template('watch_database_administrator_administratorzy.html', headings=headings_administratorzy, data=data_administratorzy, variable_suma=getSalarySum(mycursor, True))
+        return render_template('watch_database_administrator_administratorzy.html', headings=headings_osoby+headings_administratorzy, data=data_administratorzy, variable_suma=getSalarySum(mycursor, True))
 
 @app.route("/modify_osoba", methods=['GET', 'POST'])
 def modify_osoba():

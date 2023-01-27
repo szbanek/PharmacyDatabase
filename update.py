@@ -39,6 +39,7 @@ class Update():
         if validateGodz(godz_do): return "zła godz do"
         if validateGodz(godz_od): return "zła godz od"
         if validateTelephone(telefon): return "zły telefon"
+        if validateAddress(adres): return "podaj adres"
 
         query = f"""UPDATE APTEKA
                 SET nazwa = '{nazwa}',
@@ -105,10 +106,10 @@ class Update():
         if validateDate(data_zam): return "zła data (format dd.mm.rrrr)"
         
         query = f"""UPDATE ZAMOWIENIE
-                SET status '{status}',
+                SET status = '{status}',
                     DATA_ZAMOWIENIA = '{data_zam}',
                     ID_KLIENT = {id_klient}
-                WHERE id = {id} """
+                WHERE id = {id}; """
         return self.execute(query)
 
     def magazyn(
@@ -123,7 +124,7 @@ class Update():
 
         query = f"""UPDATE MAGAZYN
                 SET POJEMNOSC = {pojemnosc},
-                    ADRES = '{adres}',
+                    ADRES = '{adres}'
                 WHERE ID_APTEKA = {id_apteki} and
                     ID_LEKARSTWO = {id_lek}; """
         return self.execute(query)

@@ -14,9 +14,11 @@ class Insert():
         godz_od,
         godz_do
     ):
-        if validateID(id): return "złe id"
+        if validateID(id_farmaceuta): return "złe id farmaceuty"
+        if validateID(id_apteki): return "złe id apteki"
         if validateGodz(godz_do): return "zła godz do"
         if validateGodz(godz_od): return "zła godz od"
+        if validateDay(dzien): return "zły dzień (pon, wt, sr, czw, pi, so, ni)"
 
         query = f"""INSERT INTO DYZUR
                 (
@@ -47,6 +49,7 @@ class Insert():
         if validateGodz(godz_do): return "zła godz do"
         if validateGodz(godz_od): return "zła godz od"
         if validateTelephone(telefon): return "zły telefon"
+        if validateAddress(adres): return "podaj adres"
 
         query = f"""INSERT INTO APTEKA
                 (
